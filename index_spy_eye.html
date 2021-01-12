@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Spy Eyes</title>
+	<style>
+
+		.eye-wrapper{
+			position: absolute;
+			left:40%;
+			top: 40%;
+			height: 150px;
+			margin: 0 auto;
+			text-align:center;
+		}
+		.eye{
+			position: relative;
+			display: inline-block;
+			border-radius: 50% ;
+			width: 100px;
+			height: 100px;
+			background: radial-gradient(circle at 50% 120%, #9fefff, #7fdfff 10%, #eeeeee 80%, #ffffff 100%);
+		}
+		.eye-iris{
+			position: relative;
+			left:33%;
+			top:33%;
+			width: 33px;
+			height: 33px;
+			background: radial-gradient(circle at 50% 50%, #208ab4 0%, #6fbfff 30%, #4381b2 100%);
+			border-radius: 50% ;
+			transition: transform 0.2s linear;
+			transform: translate(0px);
+			will-change: transform;
+		}
+		.eye-iris:before {
+		  content: "";
+		  display: block;
+		  position: relative;
+		  width: 37.5%;
+		  height: 37.5%;
+		  border-radius: 50%;
+		  top: 31.25%;
+		  left: 31.25%;
+		  background: black;
+		}
+		.eye-iris:after {
+		  content: "";
+		  display: block;
+		  position: relative;
+		  width: 31.25%;
+		  height: 31.25%;
+		  border-radius: 50%;
+		  bottom: 18.75%;
+		  left: 18.75%;
+		  background: rgba(255, 255, 255, 0.2);
+		}
+	</style>
+</head>
+<body>
+	<div class='eye-wrapper'>
+		<div class="eye eye-left">
+			<div class="eye-iris iris-left"></div>
+		</div>	
+		<div class="eye eye-right">
+			<div class="eye-iris iris-right"></div>
+		</div>		
+	</div>
+	<script>
+
+		function EyeObject(eyeClass){
+			this.maxLeft = 23;
+			this.maxTop = 23;
+			this.eyeClass = eyeClass;
+			this.position = document.querySelector(this.eyeClass).getBoundingClientRect();
+
+			this.moveIris = function(mouseX, mouseY){
+				mouseX = mouseX - this.position['x'];
+				mouseY = mouseY - this.position['y'];
+				if (Math.abs(mouseX)>this.maxLeft) {
+					if (mouseX>0) mouseX = this.maxLeft;
+					else mouseX = -this.maxLeft;
+				}
+				if (Math.abs(mouseY)>this.maxTop) {
+					if (mouseY>0) mouseY = this.maxTop;
+					else mouseY = -this.maxTop;
+				}
+				document.querySelector(this.eyeClass).style.transform = "translate("+mouseX+"px, "+mouseY+"px)";
+			};
+		};
+
+		var leftEye = new EyeObject('.iris-left');
+		var rightEye = new EyeObject('.iris-right');
+
+		document.addEventListener('mousemove', (event) => {
+			leftEye.moveIris(event.clientX, event.clientY);
+			rightEye.moveIris(event.clientX, event.clientY);
+		});
+	</script>
+</body>
+</html>
